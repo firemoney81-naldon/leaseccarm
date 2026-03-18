@@ -1,23 +1,441 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <title>Home</title>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
-    <!--
-      Need a visual blank slate?
-      Remove all code in `styles.css`!
-    -->
-    <link rel="stylesheet" href="styles.css" />
-    <script type="module" src="script.js"></script>
-  </head>
-  <body>
-    <nav>
-      <a href="/" aria-current="page">Home</a>
-      <a href="/page2.html">Other page</a>
-    </nav>
-    <main>
-      <h1>Home page</h1>
-    </main>
-  </body>
-</html>
+
+  <style>
+    /* 기본 스타일 재설정 */
+    body { font-family: 'Noto Sans KR', sans-serif; line-height: 1.8; margin: 0; padding: 0; background-color: #f7f9fc; color: #333; }
+    header { background: linear-gradient(135deg, #007bff, #0056b3); color: #fff; text-align: center; padding: 60px 15px; border-radius: 0 0 12px 12px; position: relative; }
+    h1, h2, h3 { color: #004aad; font-weight: 700; }
+    h1 { font-size: 2.5rem; margin-bottom: 10px; }
+    header p { font-size: 1.1rem; opacity: 0.9; }
+    section { max-width: 900px; margin: 30px auto; padding: 30px; background: #fff; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); }
+    nav { max-width: 900px; margin: 20px auto; background: #fff; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    nav ul { display: flex; flex-wrap: wrap; justify-content: space-around; list-style: none; padding: 0; margin: 0; }
+    nav ul li a { display: block; padding: 15px 10px; text-decoration: none; color: #555; font-weight: 500; transition: color 0.3s, background-color 0.3s; }
+    nav ul li a:hover { color: #007bff; background-color: #f1f1f1; border-radius: 12px; }
+
+    /* CTA 버튼 스타일 */
+    .btn-cta {
+      display: inline-block;
+      padding: 14px 30px;
+      background: #ff6b6b; /* 주황색 계열로 변경 */
+      color: #fff;
+      font-weight: 700;
+      font-size: 1.1rem;
+      border-radius: 30px;
+      box-shadow: 0 4px 10px rgba(255, 107, 107, 0.4);
+      transition: background-color 0.3s ease, transform 0.2s;
+      text-align: center;
+      margin-top: 20px;
+      cursor: pointer;
+      border: none;
+      text-decoration: none;
+    }
+    .btn-cta:hover {
+      background: #e65c5c;
+      transform: translateY(-2px);
+    }
+
+    /* 이미지 스타일 */
+    .content-image { width: 100%; height: auto; border-radius: 10px; margin: 20px 0; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+
+    /* 표 스타일 (데이터 시각화) */
+    table { width: 100%; border-collapse: separate; border-spacing: 0; margin: 20px 0; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden; }
+    th, td { padding: 15px; text-align: left; border-bottom: 1px solid #eee; }
+    th { background: #f0f8ff; color: #004aad; font-weight: 700; border-top: none; }
+    tr:last-child td { border-bottom: none; }
+    tr:nth-child(even) { background-color: #fafafa; }
+
+    /* 그래프 시뮬레이션 (CSS 기반) */
+    .chart-container { background: #f9f9f9; padding: 20px; border-radius: 8px; margin: 20px 0; }
+    .bar-chart { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 10px; }
+    .bar-item { text-align: center; background: #fff; border-radius: 6px; padding: 15px 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+    .bar-item strong { display: block; font-size: 1.2rem; margin-bottom: 5px; color: #007bff; }
+    .bar-label { font-size: 0.9rem; color: #555; }
+
+    /* 폼 스타일 */
+    .form-container { background: #f0f8ff; padding: 30px; border-radius: 12px; border: 1px solid #e0e0e0; }
+    label { display: block; font-weight: 700; margin-bottom: 8px; color: #444; }
+    input[type="text"], input[type="tel"], select, textarea { width: calc(100% - 20px); padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; font-size: 1rem; transition: border-color 0.3s; }
+    input:focus, select:focus, textarea:focus { border-color: #007bff; outline: none; box-shadow: 0 0 5px rgba(0, 123, 255, 0.2); }
+
+    /* 기타 요소 */
+    ul { list-style-type: disc; margin-left: 20px; }
+    ol { margin-left: 20px; }
+    blockquote { border-left: 4px solid #007bff; padding: 10px 20px; margin: 20px 0; background-color: #f1f8ff; color: #444; font-style: italic; }
+    .highlight { background-color: #fffac8; padding: 2px 5px; border-radius: 3px; font-weight: 700; }
+
+    /* 반응형 디자인 */
+    @media (max-width: 768px) {
+      body { padding: 10px; }
+      header { padding: 40px 10px; }
+      section { margin: 15px auto; padding: 20px; }
+      h1 { font-size: 2rem; }
+      nav ul { flex-direction: column; }
+      nav ul li a { border-bottom: 1px solid #eee; }
+      .bar-chart { grid-template-columns: 1fr; }
+      .btn-cta { width: 100%; padding: 15px 0; font-size: 1rem; }
+      th, td { padding: 12px; font-size: 0.9rem; }
+    }
+  </style>
+
+  <!-- Schema.org RentACar 마크업(JSON-LD) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "AutoRental",
+    "name": "12개월 렌트카 비교 견적 전문",
+    "image": "https://도메인/logo-rentacar.png",
+    "url": "https://도메인/12month-rentacar",
+    "telephone": "1661-1234",
+    "description": "12개월 단기 장기 렌트카 가격 비교, 신차 출고, 할인 및 혜택 정보 제공. 고객 맞춤형 렌트카 견적 서비스.",
+    "areaServed": {
+      "@type": "Country",
+      "name": "KR"
+    },
+    "priceRange": "₩₩₩",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "서울 강남구 테헤란로 123",
+      "addressLocality": "서울시",
+      "addressRegion": "서울",
+      "postalCode": "06130",
+      "addressCountry": "KR"
+    }
+  }
+  </script>
+</head>
+
+<body>
+  <header>
+    <h1>12개월 렌트카 가격 비교 및 추천 순위</h1>
+    <p>1년 단위로 이용 가능한 <span class="highlight">단기 장기 렌트카</span>의 모든 것. 2026년 최신 견적 가이드.</p>
+    <a href="#contact" class="btn-cta">실시간 1:1 견적 상담 받기</a>
+  </header>
+
+  <nav aria-label="페이지 내 이동">
+    <ul>
+      <li><a href="#intro">12개월 렌트카란?</a></li>
+      <li><a href="#comparison">가격 비교</a></li>
+      <li><a href="#benefits">장점 및 혜택</a></li>
+      <li><a href="#recommend">업체 순위 TOP 5</a></li>
+      <li><a href="#process">가입 절차 & 체크리스트</a></li>
+      <li><a href="#contact">견적 상담</a></li>
+    </ul>
+  </nav>
+
+  <section id="intro">
+    <span id="intro-anchor" class="anchor"></span>
+    <h2>12개월 렌트카, 왜 선택해야 할까요?</h2>
+    <p>
+      최근 자동차 시장의 트렌드가 소유에서 공유로 빠르게 변화하면서, <span class="highlight">12개월 렌트카</span>가 합리적인 대안으로 떠오르고 있습니다.
+      기존의 장기 렌트카(36개월~48개월)는 계약 기간이 길어 중도 해지에 따른 위약금 부담이 컸고, 단기 렌트카(일~월 단위)는 월별 비용이 비싸다는 단점이 있었습니다.
+      <span class="highlight">1년 렌트카</span>는 이 두 가지 유형의 단점을 보완하여, <span class="highlight">12개월</span>이라는 유연한 계약 기간으로 신차를 이용할 수 있게 해주는 서비스입니다.
+    </p>
+    <p>
+      특히, 잦은 이사나 해외 파견, 사업 확장기 등 <span class="highlight">정해진 기간 동안만 차량이 필요한 경우</span>에 매우 유용합니다.
+      또한, 신차를 구매하기 전에 1년 동안 해당 모델을 충분히 경험해보고 싶은 소비자들에게도 인기가 많습니다.
+      렌트료에는 보험료, 자동차세, 정비 비용까지 포함되어 있어 추가적인 관리 비용 부담이 적다는 것도 큰 장점입니다.
+    </p>
+
+    <figure>
+      <img src="https://images.pexels.com/photos/112460/pexels-photo-112460.jpeg" alt="세련된 신차가 주차된 모습" class="content-image" />
+      <figcaption>출처: Pexels.com - 12개월 렌트카는 유연한 계약 기간과 비용 효율성을 제공합니다.</figcaption>
+    </figure>
+
+    <h3 class="mt-4">단기/장기 렌트카와의 차이점 비교 (12개월 렌트카의 장점)</h3>
+    <p>
+      <span class="highlight">12개월 렌트카</span>는 단순히 기간만 짧은 것이 아니라, 비용 효율성과 유연성 면에서 독자적인 장점을 가집니다.
+      아래 비교표를 통해 12개월 렌트카가 어떤 상황에 적합한지 확인해보세요.
+    </p>
+    <table>
+      <thead>
+        <tr>
+          <th>구분</th>
+          <th>12개월 렌트카</th>
+          <th>단기 렌트카 (1~3개월)</th>
+          <th>장기 렌트카 (36개월 이상)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>계약 기간</td>
+          <td>12개월 (1년)</td>
+          <td>1개월 ~ 3개월</td>
+          <td>36개월 ~ 60개월</td>
+        </tr>
+        <tr>
+          <td>월 평균 비용</td>
+          <td><span class="highlight">중간 수준</span> (단기보다 저렴)</td>
+          <td>가장 비쌈</td>
+          <td>가장 저렴</td>
+        </tr>
+        <tr>
+          <td>위약금 부담</td>
+          <td><span class="highlight">적음</span> (중도 해지 옵션 다양)</td>
+          <td>거의 없음 (재계약)</td>
+          <td><span class="highlight">매우 큼</span> (총 금액의 20~30%)</td>
+        </tr>
+        <tr>
+          <td>차량 관리</td>
+          <td>렌트사 전담 (정기 점검 포함)</td>
+          <td>렌트사 전담</td>
+          <td>렌트사 전담 (선택 가능)</td>
+        </tr>
+        <tr>
+          <td>주요 고객층</td>
+          <td>신차 체험, 임시 거주, 비즈니스 목적, <span class="highlight">유연성 선호</span> 고객</td>
+          <td>여행객, 단기 출장자</td>
+          <td>장기간 안정적 이용, 세금 혜택 목적 고객</td>
+        </tr>
+      </tbody>
+    </table>
+    <p>
+      결론적으로 1년이라는 기간은 장기 렌트의 경제성과 단기 렌트의 유연성을 결합한 합리적인 선택지입니다.
+    </p>
+    <a href="#contact" class="btn-cta">나에게 맞는 렌트카 유형 상담받기</a>
+  </section>
+
+  <section id="comparison">
+    <span id="comparison-anchor" class="anchor"></span>
+    <h2>12개월 렌트카 가격 & 비용 분석 (2026년 기준)</h2>
+    <p>
+      12개월 렌트카의 <span class="highlight">가격</span>은 차량 모델, 옵션, 계약자의 나이(보험 연령), 연간 주행거리 등에 따라 달라집니다.
+      일반적으로 신차 장기 렌트보다는 월 <span class="highlight">비용</span>이 다소 높게 책정되지만, 중고차 렌트나 프로모션 상품을 이용하면 <span class="highlight">저렴한 가격</span>에 이용할 수 있습니다.
+      2026년 상반기 기준으로, 차량 등급별 <span class="highlight">월평균 견적</span>을 알아보겠습니다.
+    </p>
+
+    <div class="chart-container">
+      <h3>차량 등급별 12개월 렌트카 월평균 비용 예상 (2026)</h3>
+      <div class="bar-chart">
+        <div class="bar-item">
+          <strong>35만 원~</strong>
+          <span class="bar-label">경차 (캐스퍼, 레이 등)</span>
+        </div>
+        <div class="bar-item">
+          <strong>45만 원~</strong>
+          <span class="bar-label">소형/준중형 (아반떼, K3 등)</span>
+        </div>
+        <div class="bar-item">
+          <strong>55만 원~</strong>
+          <span class="bar-label">중형 세단/SUV (쏘나타, K5, 스포티지 등)</span>
+        </div>
+      </div>
+      <p style="text-align: right; margin-top: 10px; font-size: 0.8rem; color: #777;">*기준: 만 26세 이상, 연간 주행거리 2만km, 보험 기본형</p>
+    </div>
+
+    <p>
+      <span class="highlight">12개월 렌트카 견적</span>을 <span class="highlight">저렴한 가격</span>으로 받기 위해서는 여러 업체를 <span class="highlight">비교</span>하는 것이 필수적입니다.
+      특히, 렌트카 업체마다 <span class="highlight">할인 프로모션</span>이나 <span class="highlight">신규 가입 혜택</span>이 다르므로, 여러 곳에서 견적을 받아보는 것이 좋습니다.
+      또한, 계약 시 <span class="highlight">보증금</span>이나 <span class="highlight">선납금</span>을 납부하면 월 렌트료를 낮출 수 있습니다.
+      하지만 보증금과 선납금은 성격이 다르므로, 계약 전에 <span class="highlight">장단점</span>을 명확히 파악해야 합니다.
+    </p>
+
+    <h3>견적 금액 결정 요소: 보증금 vs 선납금</h3>
+    <p>
+      보증금은 계약 종료 후 돌려받을 수 있는 금액이지만, 선납금은 월 렌트료를 미리 지불하는 것으로 돌려받지 못합니다.
+      <span class="highlight">현금 지원</span>이나 <span class="highlight">사은품</span> 등을 내세우는 곳도 많지만, 결국 총 지불 금액을 따져보는 것이 현명한 <span class="highlight">내돈내산</span> 방식입니다.
+    </p>
+    <ul>
+      <li><strong>보증금 (Deposit):</strong> 차량 가액의 10~30%를 계약 시 납부. 월 렌트료가 낮아지는 효과가 있으며, 계약 종료 후 환급되므로 부담이 적음.</li>
+      <li><strong>선납금 (Prepayment):</strong> 월 렌트료의 일부를 미리 지불. 총 렌트 기간의 비용을 낮추는 효과가 있지만, 환급되지 않음.</li>
+      <li><strong>면책금 (Deductible):</strong> 사고 발생 시 고객이 부담하는 금액. 면책금이 낮으면 월 렌트료가 올라가지만, 사고 부담은 줄어듦.</li>
+    </ul>
+
+    <figure>
+      <img src="https://images.pexels.com/photos/170811/pexels-photo-170811.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" alt="고급스러운 SUV 차량" class="content-image" />
+      <figcaption>출처: Pexels.com - 고급 차량일수록 월 렌트료가 높아지지만, 1년 단위 계약으로 부담을 줄일 수 있습니다.</figcaption>
+    </figure>
+  </section>
+
+  <section id="benefits">
+    <span id="benefits-anchor" class="anchor"></span>
+    <h2>12개월 렌트카의 핵심 장점과 혜택</h2>
+    <p>
+      장기 렌트카의 장점은 유지하면서 단점을 최소화한 <span class="highlight">12개월 렌트카</span>는 다음과 같은 매력적인 혜택을 제공합니다.
+    </p>
+
+    <h3>1. 보험료 및 세금 부담 제로</h3>
+    <p>
+      렌트카는 업체 명의로 등록되므로 고객은 별도의 자동차세나 건강보험료 인상을 걱정할 필요가 없습니다.
+      특히 개인사업자나 법인의 경우, 월 렌트료 전액을 손비 처리할 수 있어 <span class="highlight">세금 절감 효과</span>가 뛰어납니다.
+      또한, 렌트카 보험료는 개인의 보험 이력과 무관하게 책정되며, 사고 시에도 할증 부담이 없습니다.
+      <span class="highlight">만 21세</span> 또는 <span class="highlight">만 26세</span> 등 가입 연령 기준에 따라 보험료가 달라지므로 견적 시 확인해야 합니다.
+    </p>
+
+    <h3>2. 초기 비용 부담 최소화 및 신속한 출고</h3>
+    <p>
+      신차 구매 시 필요한 취득세, 등록세, 공채 등 초기 비용이 전혀 발생하지 않습니다.
+      렌트 업체에 따라 <span class="highlight">보증금 없는 조건</span>도 가능하므로, 목돈 부담 없이 차량을 이용할 수 있습니다.
+      장기 렌트카의 경우 신차 출고까지 몇 달씩 대기해야 하는 경우가 많지만, <span class="highlight">12개월 렌트카 전문 업체</span>들은 즉시 출고 가능한 재고 차량을 다수 보유하고 있어 <span class="highlight">신속한 차량 인도</span>가 가능합니다.
+    </p>
+
+    <h3>3. 유연한 계약 조건과 다양한 차량 선택권</h3>
+    <p>
+      <span class="highlight">1년 렌트카</span>는 계약 만료 시점에 차량 반납, 인수, 재계약 등 다양한 옵션을 제공합니다.
+      새로운 모델이 출시되거나 개인의 상황 변화(예: 이사, 결혼)에 따라 1년 주기로 차량을 교체할 수 있다는 점이 가장 큰 장점입니다.
+      또한, 경차부터 전기차, 수입차까지 폭넓은 <span class="highlight">상품</span> 라인업 중에서 선택할 수 있습니다.
+    </p>
+    <blockquote>
+      "최근 금융감독원 발표에 따르면, 렌터카 시장은 매년 성장하며 특히 단기-장기 사이의 유연한 계약 상품에 대한 수요가 증가하고 있습니다.
+      이는 소비자들이 '소유'보다 '경험'에 가치를 두기 시작한 결과입니다."
+      <cite><a href="https://www.fss.or.kr/" target="_blank">금융감독원 (FSS)</a> 자료 인용</cite>
+    </blockquote>
+
+    <a href="#contact" class="btn-cta">다양한 혜택 비교견적 요청하기</a>
+  </section>
+
+  <section id="recommend">
+    <span id="recommend-anchor" class="anchor"></span>
+    <h2>12개월 렌트카 전문 업체 추천 순위 TOP 5</h2>
+    <p>
+      수많은 렌트카 <span class="highlight">업체</span> 중에서 나에게 맞는 곳을 찾기란 쉽지 않습니다.
+      <span class="highlight">내돈내산 후기</span>와 <span class="highlight">비교</span>를 통해 고객 만족도가 높고 <span class="highlight">할인 혜택</span>이 많은 <span class="highlight">전문 업체</span> 5곳을 선정했습니다.
+      (※ 아래 순위는 2026년 상반기 기준 시장 조사 및 사용자 평가를 기반으로 한 가상의 순위입니다.)
+    </p>
+    <ol>
+      <li>
+        <strong>렌트플랫폼 A:</strong> <span class="highlight">신차 출고 빠름</span>, <span class="highlight">현금 지원</span> 이벤트 활발.
+        <p>
+          주요 특징: 전국 10개 이상의 렌트사와 제휴하여 실시간 견적을 제공합니다. 특히 즉시 출고 가능한 재고 차량을 다량 보유하고 있어 신속한 차량 인도가 가능합니다. <span class="highlight">신규 가입 혜택</span>으로 <span class="highlight">사은품</span> 또는 <span class="highlight">상품권</span>을 제공하는 경우가 많습니다.
+        </p>
+      </li>
+      <li>
+        <strong>업체 B (중고 렌트 전문):</strong> <span class="highlight">저렴한 가격</span>, <span class="highlight">중고차 렌트</span> 특화.
+        <p>
+          주요 특징: 신차가 아닌 1년 미만의 깨끗한 중고 차량을 주력으로 렌트합니다. 신차보다 <span class="highlight">비용</span>이 <span class="highlight">저렴</span>하며, 차량 상태가 좋은 편이라 <span class="highlight">싼곳</span>을 찾는 고객에게 추천됩니다.
+        </p>
+      </li>
+      <li>
+        <strong>렌트사 C (경차/전기차 전문):</strong> <span class="highlight">친환경차</span> 라인업, <span class="highlight">단기 장기 렌트</span> 모두 가능.
+        <p>
+          주요 특징: 경차나 전기차 라인업이 특히 강하며, 환경부 보조금 및 렌트사 자체 <span class="highlight">할인</span>을 적용하여 <span class="highlight">비용</span>을 절감할 수 있습니다. <span class="highlight">12개월</span> 계약 외에도 유연한 기간 조정이 가능합니다.
+        </p>
+      </li>
+      <li>
+        <strong>플랫폼 D (P2P 렌트):</strong> <span class="highlight">개인 간 렌트</span> 중개, 가격 경쟁력 우위.
+        <p>
+          주요 특징: 개인이 소유한 차량을 렌트하는 P2P 플랫폼으로, 기존 렌트사보다 <span class="highlight">가격</span>이 <span class="highlight">저렴</span>할 수 있습니다. 차량 소유주와의 협의를 통해 계약 기간 및 조건 조율이 유연합니다. (단, 보험 및 사고 처리 조건 확인 필수)
+        </p>
+      </li>
+      <li>
+        <strong>렌트사 E:</strong> <span class="highlight">만 21세</span> 렌트 가능, 초기 심사 조건 완화.
+        <p>
+          주요 특징: 일반적으로 까다로운 <span class="highlight">렌트카 가입 조건</span>을 완화하여 사회 초년생이나 면허 취득 초기 단계의 고객도 이용이 쉽습니다. <span class="highlight">신규 가입</span> 시 특별 <span class="highlight">혜택</span> 제공.
+        </p>
+      </li>
+    </ol>
+  </section>
+
+  <section id="process">
+    <span id="process-anchor" class="anchor"></span>
+    <h2>12개월 렌트카 가입 절차 및 필수 체크리스트</h2>
+    <p>
+      계약을 진행하기 전, 꼼꼼하게 <span class="highlight">체크리스트</span>를 확인하여 불이익을 방지해야 합니다.
+      특히 중도 해지 조건, 보험 세부 내용, 그리고 연간 주행거리 제한은 반드시 확인해야 하는 부분입니다.
+    </p>
+
+    <h3>1. 렌트카 가입 절차 (초보자를 위한 가이드)</h3>
+    <ol>
+      <li><strong>견적 신청 및 상담:</strong> 원하는 차종, 기간, 옵션을 선택하여 렌트카 업체에 견적을 문의합니다. (이때 여러 업체의 <span class="highlight">견적</span>을 받아 <span class="highlight">비교</span>하는 것이 중요)</li>
+      <li><strong>심사 서류 제출:</strong> 운전면허증, 신분증, 소득 증빙 서류 등을 제출하여 심사를 받습니다. (개인 신용도에 따라 <span class="highlight">심사</span> 기준이 달라집니다.)</li>
+      <li><strong>계약 및 차량 출고:</strong> 계약 조건 확인 후 전자 계약을 체결하고, 재고 차량의 경우 2~3일 내에 차량을 인도받습니다.</li>
+      <li><strong>차량 이용 및 만기:</strong> 12개월 이용 후 계약 만기 시점에 차량 반납 또는 인수를 선택합니다.</li>
+    </ol>
+
+    <h3>2. 계약 전 필수 체크리스트</h3>
+    <ul class="checklist-ul">
+      <li><strong>연간 주행거리 제한 확인:</strong> 계약한 주행거리를 초과하면 추가 비용이 발생합니다. <span class="highlight">평균</span> 주행거리를 고려하여 계약해야 합니다.</li>
+      <li><strong>면책금 및 보험 조건:</strong> 사고 발생 시 본인 부담금(면책금)이 얼마인지 확인합니다. 면책금 규모에 따라 월 렌트료가 달라집니다.</li>
+      <li><strong>중도 해지 위약금:</strong> 12개월 계약이라도 중도 해지 시 <span class="highlight">위약금</span>이 발생합니다. 계약서의 위약금 규정을 반드시 확인합니다.</li>
+      <li><strong>정비 서비스 포함 여부:</strong> 엔진오일 교환, 소모품 교체 등 정비 서비스가 렌트료에 포함되는지 확인하여 <span class="highlight">장점</span>을 극대화합니다.</li>
+      <li><strong>차량 상태 확인:</strong> 신차 출고 시 인수 증명서에 서명하기 전, 외관 및 기능에 이상이 없는지 꼼꼼하게 확인합니다.</li>
+    </ul>
+
+    <blockquote>
+      "한국자동차산업협회(KAMA)에 따르면, 렌터카 시장은 최근 몇 년간 개인 이용자의 비중이 급증하고 있습니다. 특히 20~30대 고객층이 유연한 12개월 계약을 선호하는 경향이 뚜렷합니다."
+      <cite><a href="http://www.kama.or.kr/" target="_blank">한국자동차산업협회 (KAMA)</a> 자료 인용</cite>
+    </blockquote>
+
+    <a href="#contact" class="btn-cta">나만의 렌트 조건으로 견적 문의하기</a>
+  </section>
+
+  <section id="faq">
+    <span id="faq-anchor" class="anchor"></span>
+    <h2>자주 묻는 질문 (FAQ)</h2>
+    <h3 class="faq-question">Q1. 12개월 렌트카는 장기 렌트카보다 많이 비싼가요?</h3>
+    <p class="faq-answer">
+      A. <span class="highlight">월평균 비용</span>만 보면 36개월 이상의 장기 렌트카보다 월 렌트료가 다소 높습니다.
+      하지만 12개월 계약은 짧은 기간 동안 유연하게 차량을 이용할 수 있으며, <span class="highlight">중도 해지 위약금</span> 부담이 적다는 <span class="highlight">장점</span>이 있습니다.
+      장기 렌트 계약을 3년으로 했다가 1년 만에 해지할 경우 발생하는 높은 <span class="highlight">위약금</span>과 비교하면 12개월 렌트카가 더 경제적일 수 있습니다.
+    </p>
+
+    <h3 class="faq-question">Q2. 신용도가 낮아도 12개월 렌트카 가입이 가능한가요?</h3>
+    <p class="faq-answer">
+      A. 렌트카 <span class="highlight">심사</span> 기준은 업체마다 다르지만, 일반적으로 신용 점수가 낮을 경우 심사 통과가 어렵거나 보증금을 요구할 수 있습니다.
+      최근에는 <span class="highlight">저신용자</span>를 위한 <span class="highlight">전문 업체</span>도 생겨나고 있으므로, 상담을 통해 <span class="highlight">가입 조건</span>을 확인해보는 것이 좋습니다.
+      소득 증빙이 확실하다면 신용도가 다소 낮더라도 심사에 긍정적인 영향을 미칠 수 있습니다.
+    </p>
+
+    <h3 class="faq-question">Q3. 12개월 렌트카 계약 만료 후 차량 인수가 가능한가요?</h3>
+    <p class="faq-answer">
+      A. 네, 가능합니다. 대부분의 <span class="highlight">12개월 렌트카 상품</span>은 계약 만료 시점에 차량 반납 또는 인수를 선택할 수 있도록 되어 있습니다.
+      <span class="highlight">인수</span>를 원할 경우, 계약 시점부터 차량의 예상 잔존가치를 확인하고, 만기 시점에 해당 금액을 지불하면 차량을 소유할 수 있습니다.
+      인수 가격은 계약 시점에 미리 정해지므로, 인수 의사가 있다면 계약 시점에 반드시 관련 조건을 확인해야 합니다.
+    </p>
+  </section>
+
+  <section id="contact">
+    <span id="contact-anchor" class="anchor"></span>
+    <h2>1:1 맞춤형 렌트카 견적 문의 (무료 상담)</h2>
+    <p>
+      나에게 딱 맞는 <span class="highlight">12개월 렌트카 견적</span>을 찾으시나요?
+      원하는 차종, 기간, <span class="highlight">할인 혜택</span>을 고려하여 최적의 <span class="highlight">가격</span>을 비교해드립니다.
+      지금 바로 상담을 신청하고 <span class="highlight">신규 가입</span> <span class="highlight">현금 지원</span> <span class="highlight">이벤트</span>도 확인해보세요.
+    </p>
+    <div class="form-container">
+      <form action="/submit" method="POST">
+        <label for="name">이름<span style="color:red;">*</span></label>
+        <input type="text" id="name" name="name" required placeholder="예: 홍길동" />
+
+        <label for="phone">연락처<span style="color:red;">*</span></label>
+        <input type="tel" id="phone" name="phone" required placeholder="010-1234-5678" pattern="[0-9\-]+" />
+
+        <label for="car-model">희망 차종</label>
+        <input type="text" id="car-model" name="car_model" placeholder="예: 쏘나타, 캐스퍼, K5 등" />
+
+        <label for="move-type">희망 계약 기간<span style="color:red;">*</span></label>
+        <select id="move-type" name="move_type" required>
+          <option value="">선택하세요</option>
+          <option value="12개월">12개월 (1년) 렌트</option>
+          <option value="18개월">18개월 렌트</option>
+          <option value="24개월">24개월 렌트</option>
+          <option value="장기렌트">장기렌트 (36개월 이상)</option>
+        </select>
+
+        <label for="age-limit">운전자 연령<span style="color:red;">*</span></label>
+        <select id="age-limit" name="age_limit" required>
+            <option value="">선택하세요</option>
+            <option value="21세">만 21세 이상</option>
+            <option value="26세">만 26세 이상</option>
+            <option value="30세">만 30세 이상</option>
+        </select>
+
+        <label for="message">추가 요청 사항</label>
+        <textarea id="message" name="message" rows="4" placeholder="예: 원하는 옵션, 주행거리, 보증금 조건 등"></textarea>
+
+        <button type="submit" class="btn-cta">무료 견적 문의하기</button>
+      </form>
+    </div>
+  </section>
+
+  <section id="footer-links" style="padding: 20px;">
+    <h3>참고 자료 및 관련 정보</h3>
+    <p>렌트카 관련 법규 및 정보는 다음 사이트를 참조하시기 바랍니다.</p>
+    <ul>
+      <li><a href="https://www.law.go.kr/법령/여객자동차운수사업법" target="_blank">여객자동차 운수사업법 (국가법령정보센터)</a>: 렌터카 사업의 법적 근거 및 규정 확인.</li>
+      <li><a href="https://www.tax.go.kr/hts/tsuser/index.html" target="_blank">국세청 홈택스</a>: 사업자 렌트료 손비 처리 및 세금 관련 정보 확인.</li>
+      <li><a href="https://namu.wiki/w/%EC%9E%A5%EA%B8%B0%EB%A0%8C%ED%8A%B8" target="_blank">나무위키 - 장기렌트</a>: 장기 렌트카의 개념, 장단점 등 상세 정보 확인.</li>
+      <li><a href="https://www.kidi.or.kr/" target="_blank">보험개발원</a>: 차량 보험료 산정 기준 및 정보.</li>
+    </ul>
+  </section>
+
+  
